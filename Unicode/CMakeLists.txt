@@ -43,7 +43,7 @@ add_library(gunicode OBJECT
   charset/ZapfDingbats.c
 )
 
-if(BUILD_SHARED_LIBS)
+if(BUILD_SHARED_LIBS_GDRAW OR BUILD_SHARED_LIBS)
   set_property(TARGET gunicode PROPERTY POSITION_INDEPENDENT_CODE ON)
 endif()
 

@@ -3,7 +3,7 @@
 # not included
 #  gdrawwacomdriver.c genkeysym.c growcol.c
 
-add_library(gdraw STATIC
+list(APPEND gdraw_objects_list
   choosericons.c
   colorP.h
   ctlvalues.c
@@ -62,11 +62,24 @@ add_library(gdraw STATIC
   xkeysyms_unicode.c
 )
 
+if(BUILD_SHARED_LIBS_GDRAW)
+  add_library(gdraw ${gdraw_objects_list})
+else()
+  add_library(gdraw STATIC ${gdraw_objects_list})
+endif()
+
 if ( NOT USE_PYTHON_SUBNAME STREQUAL "" )
   set_target_properties(gdraw PROPERTIES OUTPUT_NAME "gdraw-${USE_PYTHON_SUBNAME}")
 endif()
 
-target_link_libraries(gdraw PRIVATE fontforge)
+if(BUILD_SHARED_LIBS_GDRAW)
+  if(WIN32 OR CYGWIN)
+    target_link_options(gdraw PRIVATE -Wl,--export-all-symbols) # FIXME
+  endif()
+  target_link_libraries(gdraw PUBLIC fontforge)
+else()
+  target_link_libraries(gdraw PRIVATE fontforge)
+endif()
 
 if(ENABLE_X11)
   target_link_libraries(gdraw PUBLIC
@@ -81,4 +94,12 @@ else()
     target_sources(gdraw PRIVATE ggdkcocoa.m)
   endif()
   target_link_libraries(gdraw PUBLIC GDK3::GDK3)
+endif()
+
+if(BUILD_SHARED_LIBS_GDRAW)
+  if(WIN32 OR CYGWIN)
+    install(TARGETS gdraw RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+  else()
+    install(TARGETS gdraw RUNTIME DESTINATION ${CMAKE_INSTALL_LIBDIR} LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+  endif()
 endif()
