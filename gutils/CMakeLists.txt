@@ -1,6 +1,6 @@
 # Distributed under the original FontForge BSD 3-clause license
 
-add_library(gutils OBJECT
+list(APPEND gutils_objects_list
   dlist.c
   fsys.c
   gcol.c
@@ -32,6 +32,12 @@ add_library(gutils OBJECT
   prefs.c
   unicodelibinfo.c
 )
+
+if(BUILD_SHARED_LIBS_GUTILS)
+  add_library(gutils ${gutils_objects_list})
+else()
+  add_library(gutils OBJECT ${gutils_objects_list})
+endif()
 
 if(BUILD_SHARED_LIBS_GDRAW OR BUILD_SHARED_LIBS)
   set_property(TARGET gutils PROPERTY POSITION_INDEPENDENT_CODE ON)
@@ -67,4 +73,13 @@ else()
       gunicode
       ${gutils_LIBRARIES}
   )
+endif()
+
+if(BUILD_SHARED_LIBS_GUTILS)
+  if(WIN32 OR CYGWIN)
+    target_link_options(gutils PRIVATE -Wl,--export-all-symbols) # FIXME
+    install(TARGETS gutils RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+  else()
+    install(TARGETS gutils RUNTIME DESTINATION ${CMAKE_INSTALL_LIBDIR} LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+  endif()
 endif()
