@@ -96,6 +96,10 @@ else()
   target_link_libraries(gdraw PUBLIC GDK3::GDK3)
 endif()
 
+if(BUILD_SHARED_LIBS_GUNICODE)
+  target_link_libraries(gdraw PUBLIC gunicode)
+endif()
+
 if(BUILD_SHARED_LIBS_GDRAW)
   if(WIN32 OR CYGWIN)
     install(TARGETS gdraw RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})

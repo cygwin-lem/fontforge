@@ -1,6 +1,6 @@
 # Distributed under the original FontForge BSD 3-clause license
 
-add_library(gunicode OBJECT
+list(APPEND gunicode_objects_list
   ArabicForms.c
   char.c
   combiners.h
@@ -43,9 +43,17 @@ add_library(gunicode OBJECT
   charset/ZapfDingbats.c
 )
 
+if(BUILD_SHARED_LIBS_GUNICODE)
+  add_library(gunicode ${gunicode_objects_list})
+else()
+  add_library(gunicode OBJECT ${gunicode_objects_list})
+endif()
+
 if(BUILD_SHARED_LIBS_GDRAW OR BUILD_SHARED_LIBS)
   set_property(TARGET gunicode PROPERTY POSITION_INDEPENDENT_CODE ON)
 endif()
+
+target_link_libraries(gunicode PUBLIC Iconv::Iconv)
 
 if(${CMAKE_VERSION} VERSION_LESS "3.12.0")
   make_object_interface(gunicode
@@ -68,5 +76,14 @@ if (ENABLE_MAINTAINER_TOOLS)
   if(CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
     target_compile_options(makeutype PRIVATE -Wall)
     target_compile_options(makebuildtables PRIVATE -Wall)
+  endif()
+endif()
+
+if(BUILD_SHARED_LIBS_GUNICODE)
+  if(WIN32 OR CYGWIN)
+    target_link_options(gunicode PRIVATE -Wl,--export-all-symbols) # FIXME
+    install(TARGETS gunicode RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+  else()
+    install(TARGETS gunicode RUNTIME DESTINATION ${CMAKE_INSTALL_LIBDIR} LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
   endif()
 endif()
