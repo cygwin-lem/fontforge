@@ -2,6 +2,9 @@
 
 add_executable(fontforgeexe main.c)
 set_target_properties(fontforgeexe PROPERTIES OUTPUT_NAME "fontforge")
+if ( NOT USE_PYTHON_SUBNAME STREQUAL "" )
+  set_target_properties(fontforgeexe PROPERTIES OUTPUT_NAME "fontforge-${USE_PYTHON_SUBNAME}")
+endif()
 
 if(ENABLE_GUI)
   target_sources(fontforgeexe PRIVATE

@@ -62,6 +62,10 @@ add_library(gdraw STATIC
   xkeysyms_unicode.c
 )
 
+if ( NOT USE_PYTHON_SUBNAME STREQUAL "" )
+  set_target_properties(gdraw PROPERTIES OUTPUT_NAME "gdraw-${USE_PYTHON_SUBNAME}")
+endif()
+
 target_link_libraries(gdraw PRIVATE fontforge)
 
 if(ENABLE_X11)

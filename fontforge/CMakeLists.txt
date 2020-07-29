@@ -209,6 +209,10 @@ add_library(fontforge
   zapfnomen.c
 )
 
+if ( NOT USE_PYTHON_SUBNAME STREQUAL "" )
+  set_target_properties(fontforge PROPERTIES OUTPUT_NAME "fontforge-${USE_PYTHON_SUBNAME}")
+endif()
+
 if(ENABLE_WOFF2_RESULT)
   target_sources(fontforge PRIVATE woff2.cc)
 endif()
