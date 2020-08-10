@@ -18,3 +18,8 @@ target_link_libraries(dewoff PRIVATE ZLIB::ZLIB)
 target_link_libraries(pcl2ttf PRIVATE MathLib::MathLib)
 target_link_libraries(ttf2eps PRIVATE fontforge)
 target_link_libraries(woff PRIVATE ZLIB::ZLIB)
+
+if(BUILD_SHARED_LIBS_GUTILS)
+  target_link_libraries(acorn2sfd PRIVATE gutils)
+  target_link_libraries(ttf2eps PRIVATE gutils)
+endif()
