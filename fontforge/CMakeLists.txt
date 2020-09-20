@@ -217,6 +217,7 @@ endif()
 set_property(SOURCE splineoverlap.c APPEND PROPERTY COMPILE_OPTIONS ${FONTFORGE_EXTRA_CFLAGS})
 
 set_property(TARGET fontforge PROPERTY VERSION 4)
+set_property(TARGET fontforge PROPERTY SOVERSION 4)
 if(BUILD_SHARED_LIBS)
   if(WIN32 OR CYGWIN)
     target_link_options(fontforge PRIVATE -Wl,--export-all-symbols) # FIXME
