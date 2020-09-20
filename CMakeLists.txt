@@ -43,6 +43,7 @@ add_uninstall_target()
 
 # Options
 build_option(BUILD_SHARED_LIBS       BOOL ON  "Build libfontforge as a shared library")
+build_option(ENABLE_DEVS             BOOL OFF "Install libfontforge devels: its archive and includes")
 build_option(ENABLE_GUI              BOOL ON  "Build FontForge with GUI support")
 build_option(ENABLE_X11              BOOL OFF "Build the GUI using the X backend INSTEAD of the GDK backend" "ENABLE_GUI")
 
