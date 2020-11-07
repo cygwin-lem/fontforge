@@ -216,8 +216,10 @@ endif()
 # Turn up warnings on a few source files
 set_property(SOURCE splineoverlap.c APPEND PROPERTY COMPILE_OPTIONS ${FONTFORGE_EXTRA_CFLAGS})
 
-set_property(TARGET fontforge PROPERTY VERSION 4)
+set(LIBFONTFORGE_ABI 4)
+set_property(TARGET fontforge PROPERTY VERSION ${LIBFONTFORGE_ABI})
 if(BUILD_SHARED_LIBS)
+  set_property(TARGET fontforge PROPERTY SOVERSION ${LIBFONTFORGE_ABI})
   if(WIN32 OR CYGWIN)
     target_link_options(fontforge PRIVATE -Wl,--export-all-symbols) # FIXME
   endif()
